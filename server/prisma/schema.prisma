@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int @id @default(autoincrement())
+  email       String @unique
+  password    String
+  role        String?
+  basket      Basket?
+  favourites  Favourites?
+  compares    Compares?
+  reviews     Review[]
+}
+
+model Basket {
+    id          Int @id @default(autoincrement())
+    userId      Int
+    user        User @relation(fields: [userId], references: [id])
+    products    Product[]
+}
+
+model Favourites {
+    id          Int @id @default(autoincrement())
+    userId      Int
+    user        User @relation(fields: [userId], references: [id])
+    products    Product[]
+}
+
+model Compares {
+    id          Int @id @default(autoincrement())
+    userId      Int
+    user        User @relation(fields: [userId], references: [id])
+    products    Product[]
+}
+
+model Product {
+    id          Int @id @default(autoincrement())
+    title       String
+    rating      Float
+    price       Int
+    discount    Int @default(0)
+    size        Int
+    power       Int
+    place       String
+    material    String
+    diametr     Int
+    width       Int
+    height      Int
+    combustion  Boolean
+    oven        Boolean
+    fuel        String
+    cleanGlass  Boolean
+    country     String
+    goal        String
+    model       String
+    img         String[]
+    baskets     Basket[]
+    favourites  Favourites[]
+    compares    Compares[]
+    video       String
+    reviews     Review[]
+}
+
+model Review {
+    id          Int @id @default(autoincrement())
+    userId      Int
+    user        User @relation(fields: [userId], references: [id])
+    productId   Int
+    product     Product @relation(fields: [productId], references: [id])
+    text        String
+}
+
+model Montage {
+    id          Int @id @default(autoincrement())
+    text        String
+    title       String
+    price       Int
+}
